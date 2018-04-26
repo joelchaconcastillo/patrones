@@ -1,17 +1,16 @@
-Phi <- function(Xd, Muj, Sigmaj)
-{
-   return (exp(- norm( matrix(Xd)-matrix(Muj))^2/(2*Sigmaj^2) ))
-}
 fd <- function(xd, Beta, Mu, Sigma)
 {
    total = 0
    for(p in 1:ncol(Beta))
    {
-	total = total + Beta[1,p]* Phi(xd, Mu[p,], Sigma[,p])#  exp( - (  norm( matrix(xd) - matrix(Mu[p,]) )^2)/Sigma[1,p]  )	
+	total = total + Beta[1,p]*exp( - (  norm( matrix(xd) - matrix(Mu[p,]) )^2)/Sigma[1,p]  )	
    }
    return (total)
 }
-
+Phi <- function(Xd, Muj, Sigmaj)
+{
+   return (exp(- norm( matrix(Xd)-matrix(Muj))^2/Sigmaj ))
+}
 E <- function( Beta, Mu, Sigma, X, Y)
 {
 	total = 0
@@ -28,7 +27,7 @@ gradient_beta <- function(Beta, Mu, Sigma, X, Y)
 	{
 	   for( j in 1:ncol(Beta) )
 	   {
-	     total = total + (Y[d, ]-fd(X[d, ], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])
+	     total = total + (Y[d, ]-fd(X[d, ], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*2.0
 	   }
 	}
    	return (total)
@@ -40,7 +39,7 @@ gradient_mu<- function(Beta, Mu, Sigma, X, Y)
 	{
 	   for( j in 1:ncol(Beta) )
 	   {
-	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*( X[d,]-Mu[j])*(1.0/(Sigma[,j]^2)) 
+	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*( X[d,]-Mu[j])*(1.0/(Sigma[,j])) *2.0
 	   }
 	}
    	return (total)
@@ -52,7 +51,7 @@ gradient_sigma<- function(Beta, Mu, Sigma, X, Y)
 	{
 	   for( j in 1:ncol(Beta) )
 	   {
-	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*(norm(matrix(X[d,])- matrix(Mu[j,]))^2)/(Sigma[,j]^3)
+	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*(norm(matrix(X[d,])- matrix(Mu[j,]))^2)/(Sigma[,j]^2)*2.0
 	   }
 	}
    	return (total)
@@ -90,23 +89,22 @@ RBF <- function(Y, P, X)
    	}
    }
 #   Beta = Beta/norm(Beta)
-   nite =5000
-   delta = 0.00001
-   etaSigma = delta
-   etaMu = delta
-   etaBeta = delta
+   nite =500
+   etaSigma = 0.001
+   etaMu = 0.001
+   etaBeta = 0.001
  
- 	cl=kmeans(Y, P, nstart = 10, iter.max=100)
+ 	cl=kmeans(Y, P)
 	Mu = (cl$centers)
-#	for( i in 1:P)
-#	{
-#	Sigma[,i] = 0;
-#	   for( j in X[which(cl$cluster==i), ])
-#	   {
-#		Sigma[,i] = Sigma[,i] + sqrt(sum(j, Mu[i,])^2)
-#	   }
-#	   Sigma[,i] =  Sigma[,i] / sum(cl$cluster==i  )
-#	}		
+	for( i in 1:P)
+	{
+	Sigma[,i] = 0;
+	   for( j in 	Y[which(cl$cluster==i), ])
+	   {
+		Sigma[,i] = Sigma[,i] + sqrt(sum(j, Mu[i,])^2)
+	   }
+	   Sigma[,i] =  Sigma[,i] / sum(cl$cluster==i  )
+	}		
    for( it in 1:nite)
    {
 	Beta = Beta + etaBeta*gradient_beta(Beta, Mu, Sigma, X, Y)
@@ -119,7 +117,7 @@ RBF <- function(Y, P, X)
    Yp = X;
    for( i in 1:nrow(X))
    {
-	Yp[i,]=0
+	Yp[i,1]=0
 #	Yp[i,] = E( X[i,], Beta, Mu, Sigma, Y)
 	for( j in 1:ncol(Beta))
 	{

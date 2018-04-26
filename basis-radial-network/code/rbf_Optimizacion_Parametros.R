@@ -1,17 +1,17 @@
-Phi <- function(Xd, Muj, Sigmaj)
-{
-   return (exp(- norm( matrix(Xd)-matrix(Muj))^2/(2*Sigmaj^2) ))
-}
 fd <- function(xd, Beta, Mu, Sigma)
 {
    total = 0
    for(p in 1:ncol(Beta))
    {
-	total = total + Beta[1,p]* Phi(xd, Mu[p,], Sigma[,p])#  exp( - (  norm( matrix(xd) - matrix(Mu[p,]) )^2)/Sigma[1,p]  )	
+	total = total + Beta[1,p]*exp( - (  norm( matrix(xd) - matrix(Mu[p,]) )^2)/Sigma[1,p]  )	
    }
+
    return (total)
 }
-
+Phi <- function(Xd, Muj, Sigmaj)
+{
+   return (exp(- norm( matrix(Xd)-matrix(Muj))^2/Sigmaj ))
+}
 E <- function( Beta, Mu, Sigma, X, Y)
 {
 	total = 0
@@ -40,7 +40,7 @@ gradient_mu<- function(Beta, Mu, Sigma, X, Y)
 	{
 	   for( j in 1:ncol(Beta) )
 	   {
-	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*( X[d,]-Mu[j])*(1.0/(Sigma[,j]^2)) 
+	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*( X[d,]-Mu[j])*(1.0/(Sigma[,j])) 
 	   }
 	}
    	return (total)
@@ -52,7 +52,7 @@ gradient_sigma<- function(Beta, Mu, Sigma, X, Y)
 	{
 	   for( j in 1:ncol(Beta) )
 	   {
-	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*(norm(matrix(X[d,])- matrix(Mu[j,]))^2)/(Sigma[,j]^3)
+	     total = total + (Y[d, ]-fd(X[d,], Beta, Mu, Sigma))*Phi(X[d, ], Mu[j,], Sigma[,j])*(norm(matrix(X[d,])- matrix(Mu[j,]))^2)/(Sigma[,j]^2)
 	   }
 	}
    	return (total)
@@ -71,7 +71,6 @@ E <- function( Beta, Mu, Sigma, X, Y)
 RBF <- function(Y, P, X)
 {
 
-   
    D=ncol(X) ##calcular la dimension
    ##Vector pesos
    Beta = matrix(1,ncol=P)
@@ -82,36 +81,21 @@ RBF <- function(Y, P, X)
       
    ##Inicialización
    for(i in 1:P) {
-    Beta[1,i] = runif(1,0.1,1)
-    Sigma[1,i] = runif(1,0.1,1)
+    Beta[1,i] = runif(1,0,1)
+    Sigma[1,i] = runif(1,1,1)
    
    	for(j in 1:D) {
-   		Mu[i,j] = runif(1,0,1)	
+   		Mu[i,j] = runif(1,-1,1)	
    	}
    }
-#   Beta = Beta/norm(Beta)
-   nite =5000
-   delta = 0.00001
-   etaSigma = delta
-   etaMu = delta
-   etaBeta = delta
- 
- 	cl=kmeans(Y, P, nstart = 10, iter.max=100)
-	Mu = (cl$centers)
-#	for( i in 1:P)
-#	{
-#	Sigma[,i] = 0;
-#	   for( j in X[which(cl$cluster==i), ])
-#	   {
-#		Sigma[,i] = Sigma[,i] + sqrt(sum(j, Mu[i,])^2)
-#	   }
-#	   Sigma[,i] =  Sigma[,i] / sum(cl$cluster==i  )
-#	}		
+   Beta = Beta/norm(Beta)
+   nite = 1000
+   eta = 0.001
    for( it in 1:nite)
    {
-	Beta = Beta + etaBeta*gradient_beta(Beta, Mu, Sigma, X, Y)
-	Mu = Mu + etaMu*gradient_mu(Beta, Mu, Sigma, X, Y)
-	Sigma = Sigma + etaSigma*gradient_sigma(Beta, Mu, Sigma, X, Y)
+	Beta = Beta + eta*gradient_beta(Beta, Mu, Sigma, X, Y)
+	Mu = Mu + eta*gradient_mu(Beta, Mu, Sigma, X, Y)
+	Sigma = Sigma + eta*gradient_sigma(Beta, Mu, Sigma, X, Y)
 #	pause(0.5)
 	print(Beta)
 #	Sys.sleep(1)
@@ -119,7 +103,7 @@ RBF <- function(Y, P, X)
    Yp = X;
    for( i in 1:nrow(X))
    {
-	Yp[i,]=0
+	Yp[i,1]=0
 #	Yp[i,] = E( X[i,], Beta, Mu, Sigma, Y)
 	for( j in 1:ncol(Beta))
 	{
@@ -129,11 +113,11 @@ RBF <- function(Y, P, X)
    return (Yp)
 }
 ##
-Sizetrain=100
+Sizetrain=500
 ##Generar datos de entrenamiento
-sX = matrix( runif(Sizetrain, 0, 1), ncol=1)#nrow=Sizetrain)
+sX = matrix( runif(Sizetrain, 0, 1), ncol=2)#nrow=Sizetrain)
 #Y = matrix(sX*sX  + rnorm(100, 0, 0.1), nrow=100)
-Y = matrix(sX , nrow=Sizetrain, ncol=1)
+Y = matrix(-sX*sX+1 , nrow=Sizetrain, ncol=1)
 N=100
 
 ##Datos de prueba...
@@ -144,10 +128,8 @@ P=3
 ##Dimension
 
 Y2= RBF(Y, P, sX )
-plot(sX, Y)
-points(sX, Y2, col='red')
-
-
+#plot(sX, Y)
+#points(sX, Y2, col='red')
 #write.table(sX,file= "datax", sep="\t", col.names=FALSE, row.names=FALSE)
 #write.table(Y,file= "datay", sep="\t", col.names=FALSE, row.names=FALSE)
 #write.table(Y2,file= "datayp", sep="\t", col.names=FALSE, row.names=FALSE)
