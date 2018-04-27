@@ -1,5 +1,5 @@
 
-set.seed(30)
+#set.seed(30)
 Obj <- function(X)
 {
  return (X*X)
@@ -88,26 +88,33 @@ RBF <- function(Y, P, X, Xp)
    ##Inicialización
    for(i in 1:P) {
     Beta[1,i] = runif(1,0.1,1)
-    Sigma[1,i] = 0.01#+runif(1,0.0,1.0)
+    Sigma[1,i] = runif(1,0.0,1.0)
    
    	for(j in 1:D) {
    		Mu[i,j] = runif(1,0,1)	
    	}
    }
-   Beta = Beta/norm(Beta)
-   nite = 1000
-   eta = 0.00001
- 	cl=kmeans(X, P)
+	cl=kmeans(X, P)
 	Mu = (cl$centers)
-
+#	for( i in 1:P)
+#	{
+#	Sigma[,i] = 0;
+#	   for( j in 	Y[which(cl$cluster==i), ])
+#	   {
+#		Sigma[,i] = Sigma[,i] + sqrt(sum(j, Mu[i,])^2)
+#	   }
+#	   Sigma[,i] =  Sigma[,i] / sum(cl$cluster==i  )
+#	}
+   Beta = Beta/norm(Beta)
+   nite = 100
+   eta = 0.001
    for( it in 1:nite)
    {
-#	eta = abs(rnorm(1,0.001, 0.001))
 	Beta = Beta + eta*gradient_beta(Beta, Mu, Sigma, X, Y)
-#	Mu = Mu + eta*gradient_mu(Beta, Mu, Sigma, X, Y)
-#	Sigma = Sigma + eta*gradient_sigma(Beta, Mu, Sigma, X, Y)
+	Mu = Mu + eta*gradient_mu(Beta, Mu, Sigma, X, Y)
+	Sigma = Sigma + eta*gradient_sigma(Beta, Mu, Sigma, X, Y)
 #	pause(0.5)
-	print(Beta)
+	#print(Mu)
 #	Sys.sleep(1)
    }
    Yp = Xp;
@@ -122,7 +129,7 @@ RBF <- function(Y, P, X, Xp)
    return (Yp)
 }
 ##
-Sizetrain=100
+Sizetrain=1000
 ##Generar datos de entrenamiento
 sX = matrix( runif(Sizetrain, 0, 1), ncol=1)#nrow=Sizetrain)
 #Y = matrix(sX*sX  + rnorm(100, 0, 0.1), nrow=100)
@@ -133,7 +140,7 @@ N=100
 X2 = matrix( runif( 1000, 0, 1),ncol=ncol(sX))
 
 ##Número de neuronas..
-P=20
+P=4
 ##Dimension
 
 Y2= RBF(Y, P, sX, X2 )

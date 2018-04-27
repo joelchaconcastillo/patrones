@@ -115,11 +115,11 @@ RBF <- function(Y, P, X, Xp, min, max)
 	   total = total+ (Y[d, ] - fd(X[d, ], myBeta, myMu, mySigma))^2
 	}
    return (total)
-}  , tol = 1e-4, trace = TRUE, triter = 50, NP = 10, maxiter=100)
+}  , tol = 1e-4, trace = FALSE, triter = 50, NP = 10, maxiter=100)
 	best = best$par
 
 
-	print(best)
+#	print(best)
 	Beta = matrix(best[1:P], ncol=P)
 	Sigma = matrix(best[ (P+1):(2*P)], ncol=P)
 	Mu= matrix(best[ (2*P+1): (2*P+(D*P))], ncol=D)
@@ -167,7 +167,7 @@ Y2= RBF(Y, P, sX, X2, min, max )
 plot(sX, Y)
 points(X2, Y2, col='red')
 print(sum( (Obj(X2)-Y2)*(Obj(X2)-Y2)  ))
-write.table(sX,file= "datax", sep="\t", col.names=FALSE, row.names=FALSE)
-write.table(Y,file= "datay", sep="\t", col.names=FALSE, row.names=FALSE)
-write.table(X2,file= "dataxp", sep="\t", col.names=FALSE, row.names=FALSE)
-write.table(Y2,file= "datayp", sep="\t", col.names=FALSE, row.names=FALSE)
+#write.table(sX,file= "datax", sep="\t", col.names=FALSE, row.names=FALSE)
+#write.table(Y,file= "datay", sep="\t", col.names=FALSE, row.names=FALSE)
+#write.table(X2,file= "dataxp", sep="\t", col.names=FALSE, row.names=FALSE)
+#write.table(Y2,file= "datayp", sep="\t", col.names=FALSE, row.names=FALSE)
