@@ -1,0 +1,180 @@
+    variance          skewness          curtosis          entropy       
+ Min.   :-7.0421   Min.   :-13.773   Min.   :-5.2861   Min.   :-8.5482  
+ 1st Qu.:-1.7730   1st Qu.: -1.708   1st Qu.:-1.5750   1st Qu.:-2.4135  
+ Median : 0.4962   Median :  2.320   Median : 0.6166   Median :-0.5867  
+ Mean   : 0.4337   Mean   :  1.922   Mean   : 1.3976   Mean   :-1.1917  
+ 3rd Qu.: 2.8215   3rd Qu.:  6.815   3rd Qu.: 3.1793   3rd Qu.: 0.3948  
+ Max.   : 6.8248   Max.   : 12.952   Max.   :17.9274   Max.   : 2.4495  
+    genuine      
+ Min.   :0.0000  
+ 1st Qu.:0.0000  
+ Median :0.0000  
+ Mean   :0.4446  
+ 3rd Qu.:1.0000  
+ Max.   :1.0000  
+null device 
+          1 
+k-Nearest Neighbors 
+
+961 samples
+  4 predictors
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (30 fold) 
+Summary of sample sizes: 929, 929, 929, 929, 928, 929, ... 
+Resampling results across tuning parameters:
+
+  k   Accuracy   Kappa    
+   5  0.9979482  0.9958518
+   7  0.9989899  0.9979516
+   9  0.9989899  0.9979516
+  11  1.0000000  1.0000000
+  13  1.0000000  1.0000000
+  15  0.9958333  0.9916010
+  17  0.9916667  0.9832021
+  19  0.9916667  0.9832021
+  21  0.9916667  0.9832021
+  23  0.9916667  0.9832021
+  25  0.9916667  0.9832021
+  27  0.9916667  0.9832021
+  29  0.9906250  0.9811352
+  31  0.9906250  0.9811352
+  33  0.9906250  0.9811352
+  35  0.9885417  0.9769685
+  37  0.9885417  0.9769685
+  39  0.9854798  0.9708395
+  41  0.9885417  0.9769685
+  43  0.9854798  0.9708723
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was k = 13.
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 228   0
+         1   0 183
+                                     
+               Accuracy : 1          
+                 95% CI : (0.9911, 1)
+    No Information Rate : 0.5547     
+    P-Value [Acc > NIR] : < 2.2e-16  
+                                     
+                  Kappa : 1          
+ Mcnemar's Test P-Value : NA         
+                                     
+            Sensitivity : 1.0000     
+            Specificity : 1.0000     
+         Pos Pred Value : 1.0000     
+         Neg Pred Value : 1.0000     
+             Prevalence : 0.5547     
+         Detection Rate : 0.5547     
+   Detection Prevalence : 0.5547     
+      Balanced Accuracy : 1.0000     
+                                     
+       'Positive' Class : 0          
+                                     
+null device 
+          1 
+Neural Network 
+
+961 samples
+  4 predictors
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (30 fold) 
+Summary of sample sizes: 929, 930, 929, 928, 928, 929, ... 
+Resampling results across tuning parameters:
+
+  size  decay  Accuracy   Kappa    
+   1    0.000  0.9896129  0.9789315
+   1    0.001  0.9885712  0.9767982
+   1    0.100  0.9885712  0.9767982
+   2    0.000  0.9989583  0.9978667
+   2    0.001  0.9937816  0.9870977
+   2    0.100  1.0000000  1.0000000
+   3    0.000  0.9989583  0.9978667
+   3    0.001  0.9989899  0.9979742
+   3    0.100  1.0000000  1.0000000
+   4    0.000  1.0000000  1.0000000
+   4    0.001  0.9989899  0.9979742
+   4    0.100  0.9989899  0.9979742
+   5    0.000  1.0000000  1.0000000
+   5    0.001  1.0000000  1.0000000
+   5    0.100  0.9989899  0.9979742
+   6    0.000  1.0000000  1.0000000
+   6    0.001  0.9989899  0.9979742
+   6    0.100  1.0000000  1.0000000
+   7    0.000  1.0000000  1.0000000
+   7    0.001  0.9989899  0.9979742
+   7    0.100  0.9989899  0.9979742
+   8    0.000  1.0000000  1.0000000
+   8    0.001  0.9989899  0.9979742
+   8    0.100  0.9989899  0.9979742
+   9    0.000  0.9989899  0.9979742
+   9    0.001  0.9989899  0.9979742
+   9    0.100  0.9989899  0.9979742
+  10    0.000  0.9989899  0.9979742
+  10    0.001  0.9989899  0.9979742
+  10    0.100  0.9989899  0.9979742
+  11    0.000  0.9989899  0.9979742
+  11    0.001  0.9989899  0.9979742
+  11    0.100  0.9989899  0.9979742
+  12    0.000  1.0000000  1.0000000
+  12    0.001  0.9989899  0.9979742
+  12    0.100  0.9989899  0.9979742
+  13    0.000  0.9989899  0.9979742
+  13    0.001  1.0000000  1.0000000
+  13    0.100  0.9989899  0.9979742
+  14    0.000  0.9979482  0.9958409
+  14    0.001  1.0000000  1.0000000
+  14    0.100  0.9989899  0.9979742
+  15    0.000  0.9989899  0.9979742
+  15    0.001  1.0000000  1.0000000
+  15    0.100  0.9989899  0.9979742
+  16    0.000  0.9989899  0.9979742
+  16    0.001  0.9989899  0.9979742
+  16    0.100  0.9989899  0.9979742
+  17    0.000  0.9989899  0.9979742
+  17    0.001  1.0000000  1.0000000
+  17    0.100  0.9989899  0.9979742
+  18    0.000  0.9979482  0.9958409
+  18    0.001  0.9989899  0.9979742
+  18    0.100  0.9989899  0.9979742
+  19    0.000  0.9989899  0.9979742
+  19    0.001  1.0000000  1.0000000
+  19    0.100  0.9989899  0.9979742
+  20    0.000  0.9989899  0.9979742
+  20    0.001  1.0000000  1.0000000
+  20    0.100  0.9989899  0.9979742
+
+Accuracy was used to select the optimal model using the largest value.
+The final values used for the model were size = 2 and decay = 0.1.
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 228   0
+         1   0 183
+                                     
+               Accuracy : 1          
+                 95% CI : (0.9911, 1)
+    No Information Rate : 0.5547     
+    P-Value [Acc > NIR] : < 2.2e-16  
+                                     
+                  Kappa : 1          
+ Mcnemar's Test P-Value : NA         
+                                     
+            Sensitivity : 1.0000     
+            Specificity : 1.0000     
+         Pos Pred Value : 1.0000     
+         Neg Pred Value : 1.0000     
+             Prevalence : 0.5547     
+         Detection Rate : 0.5547     
+   Detection Prevalence : 0.5547     
+      Balanced Accuracy : 1.0000     
+                                     
+       'Positive' Class : 0          
+                                     

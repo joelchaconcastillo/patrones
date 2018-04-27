@@ -68,7 +68,7 @@ E <- function( Beta, Mu, Sigma, X, Y)
    return (total)
 }
 
-RBF <- function(Y, P, X)
+RBF <- function(Y, P, X, Yp)
 {
 
    
@@ -116,7 +116,6 @@ RBF <- function(Y, P, X)
 	print(Beta)
 #	Sys.sleep(1)
    }
-   Yp = X;
    for( i in 1:nrow(X))
    {
 	Yp[i,]=0
@@ -137,16 +136,15 @@ Y = matrix(sX , nrow=Sizetrain, ncol=1)
 N=100
 
 ##Datos de prueba...
-X2 = matrix( runif( N, -1, 1),ncol=ncol(Y))
+X2 = matrix( runif( 1000, -1, 1),ncol=ncol(Y))
 
 ##Número de neuronas..
 P=3
 ##Dimension
 
-Y2= RBF(Y, P, sX )
+Y2= RBF(Y, P, sX, X2 )
 plot(sX, Y)
 points(sX, Y2, col='red')
-
 
 #write.table(sX,file= "datax", sep="\t", col.names=FALSE, row.names=FALSE)
 #write.table(Y,file= "datay", sep="\t", col.names=FALSE, row.names=FALSE)

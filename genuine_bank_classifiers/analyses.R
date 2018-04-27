@@ -18,13 +18,14 @@ Entrenamiento <- data[particiones,] ##conjunto de entrenamiento
 Prueba <- data[-particiones,]  ##conjunto de prueba
 
 
-objcontrol <- trainControl(method="cv", number=30) ##El método de control es validación cruzada "Cross-Validation" y se implementa diez veces
+objcontrol <- trainControl(method="cv", number=30) ##El método de control es validación cruzada "Cross-Validation" y se implementa treinta veces
 ajuste_knn <- train(genuine ~ variance + skewness + curtosis + entropy, data = Entrenamiento, method = "knn", trControl=objcontrol, tuneLength = 20) ##Realizar el proceso de clasificación
 #plot(ajuste_knn) #Imprimir la exactitud obtenida con la validación cruzada.
 setEPS()
 postscript("knn_cv.eps")
 plot(ajuste_knn)
-dev.off(
+dev.off()
+ajuste_knn
 Predicciones <- predict(ajuste_knn, newdata=Prueba)
 confusionMatrix(Predicciones, Prueba$genuine)
 
@@ -34,7 +35,7 @@ setEPS()
 postscript("nnet_cv.eps")
 plot(ajust_nnet)
 dev.off()
-
+ajust_nnet
 
 Predicciones <- predict(ajust_nnet, newdata=Prueba)
 confusionMatrix(Predicciones, Prueba$genuine)
