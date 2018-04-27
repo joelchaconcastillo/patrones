@@ -138,7 +138,7 @@ N=100
 X2 = matrix( runif( N, -1, 1),ncol=ncol(Y))
 
 ##Número de neuronas..
-P=3
+P=4
 ##Dimension
 
 Y2= RBF(Y, P, sX )
